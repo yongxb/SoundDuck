@@ -1,3 +1,8 @@
+# Ignore everything in the following folders
+data/**
+logs/**
+models/**
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,3 +132,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Keep all .gitkeep files
+!.gitkeep
