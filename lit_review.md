@@ -7,11 +7,11 @@ BirdNET: A deep learning solution for avian diversity monitoring ([link](https:/
 1. Spectrogram with a FFT window size of 10.7ms (512 samples at 48kHz sampling rate), overlap of 25%, 8ms per frame. Frequency range is restricted from 150Hz to 15kHz.
       - Frequency compression using the mel scale with 64 bands, break frequency at 1750 Hz (linear scaling up to 500 Hz)
 2. Duration of bird vocalization is set to 3s chunks
-3. Sifnal strength estimation to determine presence of a bird sound (see 2016 BirdCLEF edition)
+3. Signal strength estimation to determine presence of a bird sound (see 2016 BirdCLEF edition)
 
 ### Data augmentation
 1. Random shifts in frequency and time (vertical and horizontal roll)
-2. random partial stretching in time and frequency (warping)
+2. Random partial stretching in time and frequency (warping)
 3. Addtion of noise from samples with non-salient chunks of audio
 
 ### Model architecture
