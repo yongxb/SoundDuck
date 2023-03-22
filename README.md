@@ -1,5 +1,9 @@
 # SoundDuck
 
+ Installation:
+
+`conda create -n soundduck python=3.8 && conda activate soundduck && pip install -r requirements.txt`
+
 Data download with the following library:
 
 `pip install xeno-canto`
