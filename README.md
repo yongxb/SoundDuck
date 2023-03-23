@@ -2,7 +2,8 @@
 
  Installation:
 
-`conda create -n soundduck python=3.8 && conda activate soundduck && pip install -r requirements.txt`
+1. `conda create -n soundduck python=3.8 && conda activate soundduck && pip install -r requirements.txt`
+2. Use this guide to setup ffmpeg: https://github.com/jiaaro/pydub#getting-ffmpeg-set-up
 
 Data download with the following library:
 
