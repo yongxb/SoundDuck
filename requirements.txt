@@ -1,3 +1,4 @@
 ipykernel
 xeno-canto
 pydub
+librosa
