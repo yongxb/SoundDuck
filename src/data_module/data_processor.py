@@ -1,14 +1,14 @@
 """Data processing modules"""
-from typing import List
+import glob
+import os
+from typing import List, Tuple
 
 import librosa
-import os
-import glob
-from typing import Tuple
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import skimage
-import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 
@@ -174,8 +174,21 @@ class DataPipeline:
 
         return output
 
+    def train_val_test_split(self, df, val_split=0.1, test_split=0.1):
+        train, val_test = train_test_split(
+            df, test_size=val_split + test_split, random_state=42, stratify=df.label
+        )
+        val, test = train_test_split(
+            val_test,
+            test_size=(val_split) / (val_split + test_split),
+            random_state=42,
+            stratify=val_test.label,
+        )
+
+        return train, val, test
+
     def run(self):
-        output_df = pd.DataFrame(columns=["filepath", "animal", "is_signal"])
+        output_df = pd.DataFrame(columns=["filepath", "label"])
         omit_count = 0
         for file in tqdm(self.audio_files):
             folder, filename = os.path.split(file)
@@ -204,8 +217,7 @@ class DataPipeline:
                         pd.DataFrame.from_dict(
                             {
                                 "filepath": filepaths,
-                                "animal": [animal] * len(filepaths),
-                                "is_signal": [True] * len(filepaths),
+                                "label": [animal] * len(filepaths),
                             }
                         ),
                     )
@@ -220,8 +232,7 @@ class DataPipeline:
                         pd.DataFrame.from_dict(
                             {
                                 "filepath": filepaths,
-                                "animal": [animal] * len(filepaths),
-                                "is_signal": [False] * len(filepaths),
+                                "label": ["noise"] * len(filepaths),
                             }
                         ),
                     )
@@ -229,7 +240,11 @@ class DataPipeline:
 
         print(omit_count)
         output_df = output_df.reset_index(drop=True)
-        output_df.to_csv(os.path.join(split_folder, "data.csv"), index=False)
+
+        train, val, test = self.train_val_test_split(output_df)
+        train.to_csv(os.path.join(split_folder, "train.csv"), index=False)
+        val.to_csv(os.path.join(split_folder, "val.csv"), index=False)
+        test.to_csv(os.path.join(split_folder, "test.csv"), index=False)
 
 
 if __name__ == "__main__":
