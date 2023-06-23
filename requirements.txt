@@ -1,3 +1,6 @@
 ipykernel
 xeno-canto
 pydub
+librosa
+pandas
+seaborn
