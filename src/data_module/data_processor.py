@@ -149,7 +149,7 @@ class DataPipeline:
 
         return filepaths
 
-    def split_audio(self, y, length=384, sr=48000):
+    def split_audio(self, y, length=384, sr=48000, overlap=0):
         if len(y) < 512:
             return []
         x_hann = librosa.stft(
@@ -168,9 +168,20 @@ class DataPipeline:
         )
 
         output = []
-        n_samples = melspec.shape[1] // length
+        n_samples = int((melspec.shape[1]) // (length - overlap * length))
         for i in range(n_samples):
-            output.append(melspec[:, i * length : (i + 1) * length])
+            if int(i * (length - overlap * length)) + length > melspec.shape[1]:
+                # ensure that no spectrogram is truncated
+                break
+            output.append(
+                melspec[
+                    :,
+                    int(i * (length - overlap * length)) : int(
+                        i * (length - overlap * length)
+                    )
+                    + length,
+                ]
+            )
 
         return output
 
